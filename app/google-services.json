@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "852497618174",
+    "project_id": "saga-snap",
+    "storage_bucket": "saga-snap.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852497618174:android:c2a4cefbdf8ae27bf101af",
+        "android_client_info": {
+          "package_name": "com.ghanshyam.snapsaga"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYJih9UoSXYv4gT1KmdqfuLPqR1a_icQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

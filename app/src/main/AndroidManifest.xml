@@ -16,10 +16,6 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".MobileSignInActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SnapSaga" />
-        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
