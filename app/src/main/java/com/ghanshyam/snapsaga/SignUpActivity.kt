@@ -3,8 +3,12 @@ package com.ghanshyam.snapsaga
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.ghanshyam.snapsaga.Models.UserModel
+import com.ghanshyam.snapsaga.Utils.USER
+import com.ghanshyam.snapsaga.Utils.USER_PROFILE_FOLDER
+import com.ghanshyam.snapsaga.Utils.uploadImage
 import com.ghanshyam.snapsaga.databinding.ActivitySignUpBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -12,9 +16,22 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignUpBinding
+    private lateinit var binding: com.ghanshyam.snapsaga.databinding.ActivitySignUpBinding
 
     private lateinit var user: UserModel
+    private var isProfilePicSet = false
+    private val launcher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            uploadImage(uri, USER_PROFILE_FOLDER) {
+                if (it == null) {
+                } else {
+                    user.image = it
+                    binding.profilePic.setImageURI(uri)
+                    isProfilePicSet = true
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +64,8 @@ class SignUpActivity : AppCompatActivity() {
                     "Passwords do not match",
                     Toast.LENGTH_SHORT
                 ).show()
+            } else if (!isProfilePicSet) {
+                Toast.makeText(this, "Please set a profile picture", Toast.LENGTH_SHORT).show()
             } else {
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { result ->
@@ -55,7 +74,7 @@ class SignUpActivity : AppCompatActivity() {
                             user.password = binding.password.editText?.text.toString()
                             user.email = binding.email.editText?.text.toString()
                             Firebase.auth.currentUser?.let { it1 ->
-                                Firebase.firestore.collection("User")
+                                Firebase.firestore.collection(USER)
                                     .document(it1.uid).set(user)
                                     .addOnSuccessListener {
                                         Toast.makeText(
@@ -80,6 +99,9 @@ class SignUpActivity : AppCompatActivity() {
                         }
                     }
             }
+        }
+        binding.addPic.setOnClickListener {
+            launcher.launch("image/*")
         }
     }
 }

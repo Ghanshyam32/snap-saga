@@ -10,31 +10,43 @@
     android:orientation="vertical"
     tools:context=".SignUpActivity">
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/imageView"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="70dp"-->
-    <!--        android:src="@drawable/app_icon"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_gravity="center">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/man" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilePic"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:civ_border_color="#373737"
+            app:civ_border_width="3dp"
+            android:src="@drawable/profile_user"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add your profile pic"
-        android:textColor="#989898" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/addPic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            android:src="@drawable/plus"
+            app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+            app:layout_constraintEnd_toEndOf="@+id/profilePic"
+            app:layout_constraintHorizontal_bias="0.86"
+            app:layout_constraintStart_toStartOf="@+id/profilePic"
+            app:layout_constraintTop_toTopOf="@+id/profilePic"
+            app:layout_constraintVertical_bias="1.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:hint="Username/Name"
         android:textColorHint="#767C8C"
