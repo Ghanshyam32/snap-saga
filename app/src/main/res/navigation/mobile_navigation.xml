@@ -8,38 +8,22 @@
         android:id="@+id/home"
         android:name="com.ghanshyam.snapsaga.Fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_searchFragment"
-            app:destination="@id/search" />
-    </fragment>
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/search"
         android:name="com.ghanshyam.snapsaga.Fragments.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_searchFragment_to_addFragment"
-            app:destination="@id/add" />
-    </fragment>
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/add"
         android:name="com.ghanshyam.snapsaga.Fragments.AddFragment"
         android:label="fragment_add"
-        tools:layout="@layout/fragment_add" >
-        <action
-            android:id="@+id/action_addFragment_to_reelsFragment"
-            app:destination="@id/reels" />
-    </fragment>
+        tools:layout="@layout/fragment_add" />
     <fragment
         android:id="@+id/reels"
         android:name="com.ghanshyam.snapsaga.Fragments.ReelsFragment"
         android:label="fragment_reels"
-        tools:layout="@layout/fragment_reels" >
-        <action
-            android:id="@+id/action_reelsFragment_to_profileFragment"
-            app:destination="@id/profile" />
-    </fragment>
+        tools:layout="@layout/fragment_reels" />
     <fragment
         android:id="@+id/profile"
         android:name="com.ghanshyam.snapsaga.Fragments.ProfileFragment"
