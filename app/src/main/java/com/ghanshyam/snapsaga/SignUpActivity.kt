@@ -10,10 +10,11 @@ import com.ghanshyam.snapsaga.Utils.USER
 import com.ghanshyam.snapsaga.Utils.USER_PROFILE_FOLDER
 import com.ghanshyam.snapsaga.Utils.uploadImage
 import com.ghanshyam.snapsaga.databinding.ActivitySignUpBinding
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.ktx.auth
+import com.squareup.picasso.Picasso
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -24,6 +25,7 @@ class SignUpActivity : AppCompatActivity() {
         uri?.let {
             uploadImage(uri, USER_PROFILE_FOLDER) {
                 if (it == null) {
+                    // Handle error
                 } else {
                     user.image = it
                     binding.profilePic.setImageURI(uri)
@@ -40,10 +42,34 @@ class SignUpActivity : AppCompatActivity() {
 
         user = UserModel()
 
+        if (intent.hasExtra("MODE")) {
+            if (intent.getIntExtra("MODE", -1) == 1) {
+                binding.signUp.text = "Update Profile"
+
+                Firebase.firestore.collection(USER).document(Firebase.auth.currentUser!!.uid).get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        val user = documentSnapshot.toObject(UserModel::class.java)
+                        if (user != null) {
+                            this.user = user
+                            if (!user.image.isNullOrEmpty()) {
+                                Picasso.get().load(user.image).into(binding.profilePic)
+                            }
+                            binding.name.editText?.setText(user.name)
+                            binding.email.editText?.setText(user.email)
+                            binding.password.editText?.setText(user.password)
+                        }
+                    }
+            }
+        }
+
         binding.login.setOnClickListener {
             val intent = Intent(applicationContext, LoginActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        binding.addPic.setOnClickListener {
+            launcher.launch("image/*")
         }
 
         binding.signUp.setOnClickListener {
@@ -52,52 +78,68 @@ class SignUpActivity : AppCompatActivity() {
             val password = binding.password.editText?.text.toString()
             val confirmPassword = binding.confirmPassword.editText?.text.toString()
 
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(
-                    applicationContext, "Please fill all necessary fields", Toast.LENGTH_SHORT
-                ).show()
-            } else if (password != confirmPassword) {
-                Toast.makeText(
-                    applicationContext, "Passwords do not match", Toast.LENGTH_SHORT
-                ).show()
-            } else if (!isProfilePicSet) {
-                Toast.makeText(this, "Please set a profile picture", Toast.LENGTH_SHORT).show()
-            } else {
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { result ->
-                        if (result.isSuccessful) {
-                            user.name = binding.name.editText?.text.toString()
-                            user.password = binding.password.editText?.text.toString()
-                            user.email = binding.email.editText?.text.toString()
-                            Firebase.auth.currentUser?.let { it1 ->
-                                Firebase.firestore.collection(USER).document(it1.uid).set(user)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(
-                                            applicationContext, "Login", Toast.LENGTH_SHORT
-                                        ).show()
-                                        startActivity(
-                                            Intent(
-                                                applicationContext, HomeActivity::class.java
-                                            )
-                                        )
-                                        finish()
-                                    }
-                            }
-                            Toast.makeText(
-                                applicationContext, "Welcome to SnapSaga", Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                result.exception?.localizedMessage,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+            if (intent.hasExtra("MODE") && intent.getIntExtra("MODE", -1) == 1) {
+                Firebase.firestore.collection(USER).document(Firebase.auth.currentUser!!.uid)
+                    .set(user)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            applicationContext, "Profile Updated", Toast.LENGTH_SHORT
+                        ).show()
+                        startActivity(
+                            Intent(
+                                applicationContext, HomeActivity::class.java
+                            )
+                        )
+                        finish()
                     }
+            } else {
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Please fill all necessary fields",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (password != confirmPassword) {
+                    Toast.makeText(
+                        applicationContext, "Passwords do not match", Toast.LENGTH_SHORT
+                    ).show()
+                } else if (!isProfilePicSet) {
+                    Toast.makeText(this, "Please set a profile picture", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { result ->
+                            if (result.isSuccessful) {
+                                user.name = name
+                                user.password = password
+                                user.email = email
+                                Firebase.auth.currentUser?.let { currentUser ->
+                                    Firebase.firestore.collection(USER).document(currentUser.uid)
+                                        .set(user)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                applicationContext,
+                                                "Welcome to SnapSaga",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            startActivity(
+                                                Intent(
+                                                    applicationContext, HomeActivity::class.java
+                                                )
+                                            )
+                                            finish()
+                                        }
+                                }
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    result.exception?.localizedMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                }
             }
-        }
-        binding.addPic.setOnClickListener {
-            launcher.launch("image/*")
         }
     }
 }
