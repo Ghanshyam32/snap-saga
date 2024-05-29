@@ -1,4 +1,4 @@
-package com.ghanshyam.snapsaga.Fragments
+package com.ghanshyam.snapsaga.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

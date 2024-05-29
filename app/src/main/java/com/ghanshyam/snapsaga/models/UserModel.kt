@@ -1,4 +1,4 @@
-package com.ghanshyam.snapsaga.Models
+package com.ghanshyam.snapsaga.models
 
 class UserModel {
     var image: String? = null

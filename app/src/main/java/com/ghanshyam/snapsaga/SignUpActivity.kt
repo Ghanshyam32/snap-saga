@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.ghanshyam.snapsaga.Models.UserModel
-import com.ghanshyam.snapsaga.Utils.USER
-import com.ghanshyam.snapsaga.Utils.USER_PROFILE_FOLDER
-import com.ghanshyam.snapsaga.Utils.uploadImage
+import com.ghanshyam.snapsaga.models.UserModel
+import com.ghanshyam.snapsaga.utils.USER
+import com.ghanshyam.snapsaga.utils.USER_PROFILE_FOLDER
+import com.ghanshyam.snapsaga.utils.uploadImage
 import com.ghanshyam.snapsaga.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore

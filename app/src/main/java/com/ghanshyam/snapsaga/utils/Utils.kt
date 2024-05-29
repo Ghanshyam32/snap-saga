@@ -1,4 +1,4 @@
-package com.ghanshyam.snapsaga.Utils
+package com.ghanshyam.snapsaga.utils
 
 import android.net.Uri
 import android.util.Log

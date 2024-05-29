@@ -1,4 +1,4 @@
-package com.ghanshyam.snapsaga.Fragments
+package com.ghanshyam.snapsaga.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,14 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ghanshyam.snapsaga.Models.UserModel
+import com.ghanshyam.snapsaga.models.UserModel
 import com.ghanshyam.snapsaga.SignUpActivity
-import com.ghanshyam.snapsaga.Utils.USER
-import com.ghanshyam.snapsaga.Utils.USER_PROFILE_FOLDER
+import com.ghanshyam.snapsaga.adapters.ViewPagerAdapter
+import com.ghanshyam.snapsaga.utils.USER
 import com.ghanshyam.snapsaga.databinding.FragmentProfileBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.squareup.picasso.Picasso
@@ -21,6 +20,7 @@ import com.squareup.picasso.Picasso
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,12 @@ class ProfileFragment : Fragment() {
             activity?.startActivity(intent)
             activity?.finish()
         }
+        viewPagerAdapter = ViewPagerAdapter(requireActivity().supportFragmentManager)
+        viewPagerAdapter.addFragments(MyPostFragment(), "My Post")
+        viewPagerAdapter.addFragments(MyReelsFragment(), "My Reels")
 
+        binding.viewPager.adapter = viewPagerAdapter
+        binding.tabLayout.setupWithViewPager(binding.viewPager)
         return binding.root
     }
 
