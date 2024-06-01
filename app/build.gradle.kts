@@ -60,5 +60,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-firestore")
 
-    implementation ("com.squareup.picasso:picasso:2.8")
+    implementation("com.squareup.picasso:picasso:2.8")
+    implementation("com.makeramen:roundedimageview:2.3.0")
 }
