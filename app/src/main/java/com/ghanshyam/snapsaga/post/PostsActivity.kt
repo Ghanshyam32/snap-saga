@@ -44,6 +44,7 @@ class PostsActivity : AppCompatActivity() {
         getSupportActionBar()?.setDisplayShowHomeEnabled(true)
 
         binding.materialToolbar.setNavigationOnClickListener {
+            startActivity(Intent(applicationContext, HomeActivity::class.java))
             finish()
         }
 
@@ -51,17 +52,23 @@ class PostsActivity : AppCompatActivity() {
             launcher.launch("image/*")
         }
 
+        binding.cancel.setOnClickListener {
+            startActivity(Intent(applicationContext, HomeActivity::class.java))
+            finish()
+        }
         binding.post.setOnClickListener {
             val post: PostModel = PostModel(imageUrl!!, binding.caption.editText?.text.toString())
-            Firebase.firestore.collection(Firebase.auth.currentUser!!.uid).document().set(post)
-                .addOnSuccessListener {
-                    startActivity(Intent(applicationContext, HomeActivity::class.java))
-                    finish()
-                }
-                .addOnSuccessListener {
-                    finish()
-                }
+            Firebase.firestore.collection(POST).document().set(post).addOnSuccessListener {
+                Firebase.firestore.collection(Firebase.auth.currentUser!!.uid).document().set(post)
+                    .addOnSuccessListener {
+                        startActivity(Intent(applicationContext, HomeActivity::class.java))
+                        finish()
+                    }.addOnSuccessListener {
+                        finish()
+                    }
+            }
         }
+
 
     }
 }

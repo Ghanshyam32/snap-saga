@@ -9,8 +9,9 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_margin="1dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="1dp"
+        android:layout_margin="2dp"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/app_icon"
         tools:layout_editor_absoluteX="151dp"

@@ -5,6 +5,122 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".post.ReelsActivity">
+    android:background="@color/black"
+    tools:context=".post.PostsActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/material_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#151515"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="New Reel"
+        app:titleTextColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/selectReel"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/add_video_icon"
+        android:text="Select Your Reel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.146" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/caption"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:hint="Write a caption"
+        android:textColorHint="#767C8C"
+        app:layout_constraintEnd_toEndOf="@+id/selectReel"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/selectReel"
+        app:layout_constraintTop_toBottomOf="@+id/selectReel">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="visible" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/k"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/caption">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:outlineSpotShadowColor="@color/white"
+            android:src="@drawable/reels_insta" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Share Reel"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/k">
+
+
+        <Button
+            android:id="@+id/post"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#0064E0"
+            android:text="Post"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/textInputEditText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textInputEditText" />
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="Cancel"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textInputEditText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textInputEditText"
+            app:strokeColor="#0064E0" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
