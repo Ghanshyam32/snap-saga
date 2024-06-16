@@ -8,12 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ghanshyam.snapsaga.HomeActivity
 import com.ghanshyam.snapsaga.databinding.ActivityReelsBinding
 import com.ghanshyam.snapsaga.models.ReelModel
+import com.ghanshyam.snapsaga.models.UserModel
 import com.ghanshyam.snapsaga.utils.REEL
 import com.ghanshyam.snapsaga.utils.REELS_FOLDER
+import com.ghanshyam.snapsaga.utils.USER
 import com.ghanshyam.snapsaga.utils.uploadVideo
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 
 class ReelsActivity : AppCompatActivity() {
 
@@ -55,16 +58,22 @@ class ReelsActivity : AppCompatActivity() {
             finish()
         }
         binding.post.setOnClickListener {
-            val reel: ReelModel = ReelModel(videoUrl!!, binding.caption.editText?.text.toString())
-            Firebase.firestore.collection(REEL).document().set(reel).addOnSuccessListener {
-                Firebase.firestore.collection(Firebase.auth.currentUser!!.uid+ REEL).document().set(reel)
-                    .addOnSuccessListener {
-                        startActivity(Intent(applicationContext, HomeActivity::class.java))
-                        finish()
-                    }.addOnSuccessListener {
-                        finish()
+            Firebase.firestore.collection(USER).document(Firebase.auth.currentUser!!.uid).get()
+                .addOnSuccessListener {
+                    var user: UserModel = it.toObject<UserModel>()!!
+                    val reel: ReelModel =
+                        ReelModel(videoUrl!!, binding.caption.editText?.text.toString(), user.image!!)
+                    Firebase.firestore.collection(REEL).document().set(reel).addOnSuccessListener {
+                        Firebase.firestore.collection(Firebase.auth.currentUser!!.uid + REEL)
+                            .document().set(reel)
+                            .addOnSuccessListener {
+                                startActivity(Intent(applicationContext, HomeActivity::class.java))
+                                finish()
+                            }.addOnSuccessListener {
+                                finish()
+                            }
                     }
-            }
+                }
         }
     }
 }

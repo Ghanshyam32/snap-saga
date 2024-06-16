@@ -48,7 +48,7 @@ fun uploadVideo(
         Log.e("Utils", "Video upload failed: ${exception.message}")
         callback(null)
     }.addOnProgressListener {
-        val uploadedValue: Long = it.bytesTransferred / it.totalByteCount
+        val uploadedValue: Long = (it.bytesTransferred / it.totalByteCount)*100
         progressDialog.setMessage("Uploaded $uploadedValue%")
     }
 }
