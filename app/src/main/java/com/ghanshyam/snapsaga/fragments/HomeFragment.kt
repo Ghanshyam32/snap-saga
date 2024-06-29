@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
         (requireContext() as AppCompatActivity).setSupportActionBar(binding.materialToolbar)
 
-        Firebase.firestore.collection(POST).get().addOnSuccessListener {
+        Firebase.firestore.collection(POST).get ().addOnSuccessListener {
             val tempList = ArrayList<PostModel>()
             postList.clear()
             for (i in it.documents) {

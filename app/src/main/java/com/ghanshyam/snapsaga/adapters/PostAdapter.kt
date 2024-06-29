@@ -1,6 +1,9 @@
 package com.ghanshyam.snapsaga.adapters
 
 import android.content.Context
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -57,9 +60,44 @@ class PostAdapter(var context: Context, var postList: ArrayList<PostModel>) :
         }
         holder.binding.caption.text = postList.get(position).caption
 
-        holder.binding.like.setOnClickListener {
-            holder.binding.like.setImageResource(R.drawable.heart)
+        holder.binding.share.setOnClickListener {
+            holder.binding.share.setImageResource(R.drawable.send_t)
+
+            // Creating Handler to revert the image back after a short delay
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                // Reverting the image back to the "share" drawable
+                holder.binding.share.setImageResource(R.drawable.send_icon)
+            }, 600) // Delay in milliseconds (e.g., 300ms for a blink effect)
+
+            var i = Intent(android.content.Intent.ACTION_SEND)
+            i.type = "text/plan"
+            i.putExtra(Intent.EXTRA_TEXT, postList.get(position).postUrl)
+            context.startActivity(i)
         }
+
+        var isLiked = false
+
+        holder.binding.like.setOnClickListener {
+            if (isLiked) {
+                holder.binding.like.setImageResource(R.drawable.like)
+            } else {
+                holder.binding.like.setImageResource(R.drawable.heart)
+            }
+            isLiked = !isLiked // Toggle the state
+        }
+
+        var isSaved = false
+
+        holder.binding.save.setOnClickListener {
+            if (isSaved) {
+                holder.binding.save.setImageResource(R.drawable.save_icon)
+            } else {
+                holder.binding.save.setImageResource(R.drawable.save_icon_white)
+            }
+            isSaved = !isSaved // Toggle the state
+        }
+
     }
 
 }
