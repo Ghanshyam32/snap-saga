@@ -34,38 +34,39 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/userPic"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_margin="5dp"
                 android:layout_marginBottom="6dp"
+                android:src="@drawable/man"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/man" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView5"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:src="@drawable/plus"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="1dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-                app:layout_constraintEnd_toEndOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="@+id/imageView4"
-                app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/plus" />
+                app:layout_constraintBottom_toBottomOf="@+id/userPic"
+                app:layout_constraintEnd_toEndOf="@+id/userPic"
+                app:layout_constraintTop_toTopOf="@+id/userPic"
+                app:layout_constraintVertical_bias="1.0" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/followList"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/userPic"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.7" />
+                app:layout_constraintVertical_bias="1.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

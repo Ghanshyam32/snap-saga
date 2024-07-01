@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".fragments.SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Search" />
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/search_bg"
+        android:hint="Search"
+        android:paddingStart="20dp"
+        android:textColorHint="#575757"
+        app:layout_constraintBottom_toTopOf="@+id/searchRes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/search_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/search_new"
+        app:layout_constraintBottom_toBottomOf="@+id/searchView"
+        app:layout_constraintEnd_toEndOf="@+id/searchView"
+        app:layout_constraintTop_toTopOf="@+id/searchView"
+        app:layout_constraintVertical_bias="0.516"
+        app:tint="#9F9F9F" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+</androidx.constraintlayout.widget.ConstraintLayout>
