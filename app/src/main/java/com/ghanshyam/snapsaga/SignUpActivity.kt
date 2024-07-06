@@ -23,11 +23,11 @@ class SignUpActivity : AppCompatActivity() {
     private var isProfilePicSet = false
     private val launcher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-            uploadImage(uri, USER_PROFILE_FOLDER) {
-                if (it == null) {
+            uploadImage(uri, USER_PROFILE_FOLDER) { downloadUrl ->
+                if (downloadUrl == null) {
                     // Handle error
                 } else {
-                    user.image = it
+                    user.image = downloadUrl
                     binding.profilePic.setImageURI(uri)
                     isProfilePicSet = true
                 }
@@ -42,30 +42,37 @@ class SignUpActivity : AppCompatActivity() {
 
         user = UserModel()
 
-        if (intent.hasExtra("MODE")) {
-            if (intent.getIntExtra("MODE", -1) == 1) {
-                binding.signUp.text = "Update Profile"
+        if (intent.hasExtra("MODE") && intent.getIntExtra("MODE", -1) == 1) {
+            binding.signUp.text = "Update Profile"
+            binding.login.text = "Sign Out"
 
-                Firebase.firestore.collection(USER).document(Firebase.auth.currentUser!!.uid).get()
-                    .addOnSuccessListener { documentSnapshot ->
-                        val user = documentSnapshot.toObject(UserModel::class.java)
-                        if (user != null) {
-                            this.user = user
-                            if (!user.image.isNullOrEmpty()) {
-                                Picasso.get().load(user.image).into(binding.profilePic)
-                            }
-                            binding.name.editText?.setText(user.name)
-                            binding.email.editText?.setText(user.email)
-                            binding.password.editText?.setText(user.password)
+            Firebase.firestore.collection(USER).document(Firebase.auth.currentUser!!.uid).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val user = documentSnapshot.toObject(UserModel::class.java)
+                    if (user != null) {
+                        this.user = user
+                        if (!user.image.isNullOrEmpty()) {
+                            Picasso.get().load(user.image).into(binding.profilePic)
+                            isProfilePicSet = true
                         }
+                        binding.name.editText?.setText(user.name)
+                        binding.email.editText?.setText(user.email)
+                        binding.password.editText?.setText(user.password)
                     }
-            }
+                }
         }
 
         binding.login.setOnClickListener {
-            val intent = Intent(applicationContext, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+            if (intent.hasExtra("MODE") && intent.getIntExtra("MODE", -1) == 1) {
+                Firebase.auth.signOut()
+                val intent = Intent(applicationContext, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                val intent = Intent(applicationContext, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
 
         binding.addPic.setOnClickListener {
@@ -79,19 +86,34 @@ class SignUpActivity : AppCompatActivity() {
             val confirmPassword = binding.confirmPassword.editText?.text.toString()
 
             if (intent.hasExtra("MODE") && intent.getIntExtra("MODE", -1) == 1) {
-                Firebase.firestore.collection(USER).document(Firebase.auth.currentUser!!.uid)
-                    .set(user)
-                    .addOnSuccessListener {
-                        Toast.makeText(
-                            applicationContext, "Profile Updated", Toast.LENGTH_SHORT
-                        ).show()
-                        startActivity(
-                            Intent(
-                                applicationContext, HomeActivity::class.java
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Please fill all necessary fields",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (password != confirmPassword) {
+                    Toast.makeText(
+                        applicationContext, "Passwords do not match", Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    user.name = name
+                    user.email = email
+                    user.password = password
+                    Firebase.firestore.collection(USER).document(Firebase.auth.currentUser!!.uid)
+                        .set(user)
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                applicationContext, "Profile Updated", Toast.LENGTH_SHORT
+                            ).show()
+                            startActivity(
+                                Intent(
+                                    applicationContext, HomeActivity::class.java
+                                )
                             )
-                        )
-                        finish()
-                    }
+                            finish()
+                        }
+                }
             } else {
                 if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                     Toast.makeText(
