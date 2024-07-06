@@ -17,6 +17,7 @@
         android:layout_marginEnd="14dp"
         android:background="@drawable/search_bg"
         android:hint="Search"
+        android:maxLines="1"
         android:paddingStart="20dp"
         android:textColorHint="#575757"
         app:layout_constraintBottom_toTopOf="@+id/searchRes"

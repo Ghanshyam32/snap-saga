@@ -17,10 +17,14 @@ import com.ghanshyam.snapsaga.models.PostModel
 import com.ghanshyam.snapsaga.models.UserModel
 import com.ghanshyam.snapsaga.utils.FOLLOW
 import com.ghanshyam.snapsaga.utils.POST
+import com.ghanshyam.snapsaga.utils.USER
+import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 
 class HomeFragment : Fragment() {
 
@@ -72,7 +76,13 @@ class HomeFragment : Fragment() {
             postList.addAll(tempList)
             adapter.notifyDataSetChanged()
         }
-
+        Firebase.firestore.collection(USER).document(com.google.firebase.Firebase.auth.currentUser!!.uid).get()
+            .addOnSuccessListener {
+                val user: UserModel = it.toObject<UserModel>()!!
+                if (!user.image.isNullOrEmpty()) {
+                    Picasso.get().load(user.image).into(binding.userPic)
+                }
+            }
         return binding.root
     }
 

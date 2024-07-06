@@ -4,8 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ghanshyam.snapsaga.R
@@ -14,9 +18,8 @@ import com.ghanshyam.snapsaga.models.PostModel
 import com.ghanshyam.snapsaga.models.UserModel
 import com.ghanshyam.snapsaga.utils.USER
 import com.github.marlonlom.utilities.timeago.TimeAgo
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import java.lang.Exception
 
 class PostAdapter(var context: Context, var postList: ArrayList<PostModel>) :
@@ -25,7 +28,7 @@ class PostAdapter(var context: Context, var postList: ArrayList<PostModel>) :
     inner class MyHolder(var binding: PostsHomeBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
-        var binding = PostsHomeBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = PostsHomeBinding.inflate(LayoutInflater.from(context), parent, false)
         return MyHolder(binding)
     }
 
@@ -34,70 +37,77 @@ class PostAdapter(var context: Context, var postList: ArrayList<PostModel>) :
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
+        val post = postList[position]
 
-        try {
-            Firebase.firestore.collection(USER).document(postList.get(position).uid).get()
-                .addOnSuccessListener {
-
-                    var user = it.toObject<UserModel>()
-                    Glide.with(context).load(user!!.image).placeholder(R.drawable.man)
+        // Fetch user data once
+        FirebaseFirestore.getInstance().collection(USER).document(post.uid).get()
+            .addOnSuccessListener { document ->
+                val user = document.toObject<UserModel>()
+                if (user != null) {
+                    Glide.with(context).load(user.image).placeholder(R.drawable.man)
                         .into(holder.binding.profilePic)
                     holder.binding.name.text = user.name
+
+                    // Combine username and caption
+                    val username = user.name
+                    val caption = post.caption
+                    val captionText = "$username $caption"
+                    val spannableString = SpannableString(captionText)
+                    if (username != null) {
+                        spannableString.setSpan(
+                            StyleSpan(android.graphics.Typeface.BOLD),
+                            0,
+                            username.length,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                    holder.binding.caption.text = spannableString
                 }
-        } catch (e: Exception) {
+            }
+            .addOnFailureListener {
+                holder.binding.name.text = ""
+                holder.binding.caption.text = post.caption
+            }
 
-        }
-
-
-        Glide.with(context).load(postList.get(position).postUrl).placeholder(R.drawable.img_2)
+        // Load post image
+        Glide.with(context).load(post.postUrl).placeholder(R.drawable.img_2)
             .into(holder.binding.userPost)
 
+        // Set post time
         try {
-            val text = TimeAgo.using(postList.get(position).time.toLong())
+            val text = TimeAgo.using(post.time.toLong())
             holder.binding.time.text = text
         } catch (e: Exception) {
             holder.binding.time.text = ""
         }
-        holder.binding.caption.text = postList.get(position).caption
 
+        // Share button click listener
         holder.binding.share.setOnClickListener {
             holder.binding.share.setImageResource(R.drawable.send_t)
-
-            // Creating Handler to revert the image back after a short delay
             val handler = Handler(Looper.getMainLooper())
             handler.postDelayed({
-                // Reverting the image back to the "share" drawable
                 holder.binding.share.setImageResource(R.drawable.send_icon)
-            }, 600) // Delay in milliseconds (e.g., 300ms for a blink effect)
+            }, 600)
 
-            var i = Intent(android.content.Intent.ACTION_SEND)
-            i.type = "text/plan"
-            i.putExtra(Intent.EXTRA_TEXT, postList.get(position).postUrl)
-            context.startActivity(i)
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, post.postUrl)
+            }
+            context.startActivity(Intent.createChooser(intent, "Share via"))
         }
 
+        // Like button click listener
         var isLiked = false
-
         holder.binding.like.setOnClickListener {
-            if (isLiked) {
-                holder.binding.like.setImageResource(R.drawable.like)
-            } else {
-                holder.binding.like.setImageResource(R.drawable.heart)
-            }
-            isLiked = !isLiked // Toggle the state
+            isLiked = !isLiked
+            holder.binding.like.setImageResource(if (isLiked) R.drawable.heart else R.drawable.like)
         }
 
+        // Save button click listener
         var isSaved = false
-
         holder.binding.save.setOnClickListener {
-            if (isSaved) {
-                holder.binding.save.setImageResource(R.drawable.save_icon)
-            } else {
-                holder.binding.save.setImageResource(R.drawable.save_icon_white)
-            }
-            isSaved = !isSaved // Toggle the state
+            isSaved = !isSaved
+            holder.binding.save.setImageResource(if (isSaved) R.drawable.save_icon_white else R.drawable.save_icon)
         }
-
     }
-
 }

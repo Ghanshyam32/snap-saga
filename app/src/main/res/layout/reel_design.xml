@@ -5,15 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <VideoView
-        android:id="@+id/videoView"
+    <FrameLayout
+        android:id="@+id/videoFrame"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
+
+    </FrameLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePic"
@@ -44,8 +53,8 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/videoView"
-        app:layout_constraintEnd_toEndOf="@+id/videoView"
+        app:layout_constraintBottom_toBottomOf="@+id/videoFrame"
+        app:layout_constraintEnd_toEndOf="@+id/videoFrame"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
