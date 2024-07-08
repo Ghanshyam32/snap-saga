@@ -25,8 +25,21 @@ class FollowAdapter(var context: Context, var followList: ArrayList<UserModel>) 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(context).load(followList.get(position).image).placeholder(R.drawable.man)
+        Glide.with(context).load(followList[position].image).placeholder(R.drawable.man)
             .into(holder.binding.userPic)
-        holder.binding.name.text = followList.get(position).name
+
+        val name = followList[position].name
+        if (name != null) {
+            if (name.length > 10) {
+                // Trim the name to 15 characters and add ellipsis
+                if (name != null) {
+                    holder.binding.name.text = name.substring(0, 10) + "..."
+                }
+            } else {
+                // Set the name as is
+                holder.binding.name.text = name
+            }
+        }
     }
+
 }

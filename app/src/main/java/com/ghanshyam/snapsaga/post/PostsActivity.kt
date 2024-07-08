@@ -42,8 +42,7 @@ class PostsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         binding.materialToolbar.setNavigationOnClickListener {
-            startActivity(Intent(applicationContext, HomeActivity::class.java))
-            finish()
+            navigateToHome()
         }
 
         binding.image.setOnClickListener {
@@ -51,8 +50,7 @@ class PostsActivity : AppCompatActivity() {
         }
 
         binding.cancel.setOnClickListener {
-            startActivity(Intent(applicationContext, HomeActivity::class.java))
-            finish()
+            navigateToHome()
         }
 
         binding.post.setOnClickListener {
@@ -72,8 +70,7 @@ class PostsActivity : AppCompatActivity() {
                                 .addOnSuccessListener {
                                     Firebase.firestore.collection(currentUser.uid).document().set(post)
                                         .addOnSuccessListener {
-                                            startActivity(Intent(applicationContext, HomeActivity::class.java))
-                                            finish()
+                                            navigateToHome()
                                         }
                                 }
                         }
@@ -83,5 +80,15 @@ class PostsActivity : AppCompatActivity() {
                 // You can show a toast or log an error message here
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        navigateToHome()
+    }
+
+    private fun navigateToHome() {
+        startActivity(Intent(applicationContext, HomeActivity::class.java))
+        finish()
     }
 }

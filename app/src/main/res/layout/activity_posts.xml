@@ -41,18 +41,24 @@
         android:hint="Write a caption"
         android:textColorHint="#767C8C"
         app:layout_constraintEnd_toEndOf="@+id/image"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="@+id/image"
         app:layout_constraintTop_toBottomOf="@+id/image">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/captionEditText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+            android:maxLines="5"
+            android:minLines="1"
+            android:textColor="@android:color/white"
             android:textSize="15sp"
             android:visibility="visible" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
 
     <LinearLayout
         android:id="@+id/k"
